@@ -37,7 +37,7 @@ requirements:
     - spla
     - boost-cpp    # [osx]
     - pkg-config
-    - scalapack
+    - costa-scalapack
   run:
     - {{ mpi }}
     - scalapack
