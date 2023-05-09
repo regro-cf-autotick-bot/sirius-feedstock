@@ -1,21 +1,41 @@
 diff --git a/src/context/simulation_context.cpp b/src/context/simulation_context.cpp
-index 392a3958..ebb80e8b 100644
+index 6ed68f522..91f4f3c70 100644
 --- a/src/context/simulation_context.cpp
 +++ b/src/context/simulation_context.cpp
-@@ -629,8 +629,6 @@ void Simulation_context::print_info() const
-     std::printf("maximum number of OMP threads : %i\n", omp_get_max_threads());
-     std::printf("number of MPI ranks per node  : %i\n", num_ranks_per_node());
-     std::printf("page size (Kb)                : %li\n", utils::get_page_size() >> 10);
--    std::printf("number of pages               : %li\n", utils::get_num_pages());
--    std::printf("available memory (GB)         : %li\n", utils::get_total_memory() >> 30);
- 
-     std::string headers[]         = {"FFT context for density and potential", "FFT context for coarse grid"};
-     double cutoffs[]              = {pw_cutoff(), 2 * gk_cutoff()};
+@@ -663,9 +663,7 @@ Simulation_context::print_info(std::ostream& out__) const
+         }
+         os << "maximum number of OMP threads : " << omp_get_max_threads() << std::endl
+            << "number of MPI ranks per node  : " << mpi::num_ranks_per_node() << std::endl
+-           << "page size (Kb)                : " << (utils::get_page_size() >> 10) << std::endl
+-           << "number of pages               : " << utils::get_num_pages() << std::endl
+-           << "available memory (GB)         : " << (utils::get_total_memory() >> 30) << std::endl;
++           << "page size (Kb)                : " << (utils::get_page_size() >> 10) << std::endl;
+         os << std::endl;
+     }
+     {
 diff --git a/src/utils/utils.hpp b/src/utils/utils.hpp
-index 611511e5..5600d143 100644
+index a10f5a0a4..938d9ab3d 100644
 --- a/src/utils/utils.hpp
 +++ b/src/utils/utils.hpp
-@@ -350,16 +350,6 @@ inline long get_page_size()
+@@ -143,7 +143,7 @@ inline std::vector<int> l_by_lm(int lmax__)
+ 
+ /// Check if file exists.
+ /** \param[in] file_name Full path to the file being checked.
+- *  \return True if file exists, false otherwise. 
++ *  \return True if file exists, false otherwise.
+  */
+ inline bool file_exists(std::string file_name)
+ {
+@@ -204,7 +204,7 @@ inline int packed_index(int i__, int j__)
+        |     + |
+        +-------+
+ 
+-       i, j are row and column indices 
++       i, j are row and column indices
+     */
+ 
+     if (i__ > j__) {
+@@ -403,15 +403,6 @@ inline long get_page_size()
      return sysconf(_SC_PAGESIZE);
  }
  
@@ -28,7 +48,15 @@ index 611511e5..5600d143 100644
 -{
 -    return get_page_size() * get_num_pages();
 -}
--
+ 
  ///// Check if lambda F(Args) is of type T.
  //template <typename T, typename F, typename ...Args>
- //constexpr bool check_lambda_type()
+@@ -534,7 +525,7 @@ inline std::string& ltrim(std::string& str, const std::string& chars = "\t\n\v\f
+     str.erase(0, str.find_first_not_of(chars));
+     return str;
+ }
+- 
++
+ inline std::string& rtrim(std::string& str, const std::string& chars = "\t\n\v\f\r ")
+ {
+     str.erase(str.find_last_not_of(chars) + 1);
