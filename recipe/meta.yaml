@@ -38,6 +38,7 @@ requirements:
     - boost-cpp    # [osx]
     - pkg-config
     - scalapack
+    - costa
   run:
     - {{ mpi }}
     - scalapack
