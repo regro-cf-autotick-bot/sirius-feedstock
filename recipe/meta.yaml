@@ -37,7 +37,7 @@ requirements:
     - spfft
     - costa
     - spla
-    - libboost-devel
+    - libboost-headers
     - pkg-config
     - scalapack
   run:
